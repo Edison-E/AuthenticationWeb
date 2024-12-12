@@ -1,10 +1,12 @@
 <template>
-  <form class="formulario">
+  <form v-if="!isAuthenticated" class="formulario">
     <legend>LOGIN</legend>
     <input type="text" v-model="email" placeholder="email" /><br />
     <input type="password" v-model="password" placeholder="password" /><br />
     <input type="submit" value="Login" @click="AuthenticateUser($event)" />
   </form>
+
+  <Router-view v-else />
 </template>
 
 <script>
@@ -18,6 +20,11 @@ export default {
       password: "",
       error: "",
     };
+  },
+  computed: {
+    isAuthenticated(){
+      return this.$store.state.isAuthenticate;
+    }
   },
   methods: {
     AuthenticateUser(event) {
@@ -40,16 +47,19 @@ export default {
         });
     },
     UserAuthenticate(token) {
+      this.$store.commit('setAuthentication', true)
+
       axios
         .get("https://localhost:7187/api/User/Index", {
           headers: {
             Authorization: "Bearer " + token,
           },
         })
-        .then(function (response) {
+        .then((response) => {
           console.log(response);
+          this.$router.push({ name : 'Home' })
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     },

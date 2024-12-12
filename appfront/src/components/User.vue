@@ -10,7 +10,7 @@ export default {
   name: "HomeUser",
   methods: {
     logout(){
-      this.$store.commit('setAuthenticate', false);
+      this.$store.commit('setAuthentication', false);
       this.$router.push('/');
     }
   }
