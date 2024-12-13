@@ -22,15 +22,15 @@ export default {
     };
   },
   computed: {
-    isAuthenticated(){
+    isAuthenticated() {
       return this.$store.state.isAuthenticate;
-    }
+    },
   },
   methods: {
     AuthenticateUser(event) {
       event.preventDefault();
       var json = JSON.stringify({ email: this.email, password: this.password });
-    
+
       axios
         .post("https://localhost:7187/api/Controller/Login", json, {
           headers: {
@@ -39,15 +39,17 @@ export default {
         })
         .then((response) => {
           alert("Credenciales validas !!!");
-          this.UserAuthenticate(response.data.token);
+          this.UserAuthenticate(response.data.token, response.data.name, response.data.email);
         })
         .catch((error) => {
           alert("Credenciales invalidas");
           console.log(error);
         });
     },
-    UserAuthenticate(token) {
-      this.$store.commit('setAuthentication', true)
+    UserAuthenticate(token, username, email) {
+      this.$store.commit("setAuthentication", true);
+      this.$store.commit("setUsername", username);
+      this.$store.commit("setEmail", email);
 
       axios
         .get("https://localhost:7187/api/User/Index", {
@@ -57,7 +59,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          this.$router.push({ name : 'Home' })
+          this.$router.push({ name: "Home" });
         })
         .catch((error) => {
           console.log(error);
