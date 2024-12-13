@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeUser from '../components/User.vue'
-import store from '../store'
+import store from '../store/store'
 
 const routes = [
     {
@@ -8,6 +8,11 @@ const routes = [
         name: 'Home',
         component: HomeUser,
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/',
+        name: 'Login',
+        component: () => import("../App.vue"),
     }
 ]
 
