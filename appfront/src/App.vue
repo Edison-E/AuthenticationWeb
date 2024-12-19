@@ -32,33 +32,33 @@ export default {
       var json = JSON.stringify({ email: this.email, password: this.password });
 
       axios
-        .post("https://localhost:7187/api/Controller/Login", json, {
+        .post("https://localhost:7187/api/Account/Login", json, {
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((response) => {
           alert("Credenciales validas !!!");
-          this.UserAuthenticate(response.data.token, response.data.name, response.data.email);
+          this.UserAuthenticate(response.data.token);
         })
         .catch((error) => {
           alert("Credenciales invalidas");
           console.log(error);
         });
     },
-    UserAuthenticate(token, username, email) {
+    UserAuthenticate(token) {
       this.$store.commit("setAuthentication", true);
-      this.$store.commit("setUsername", username);
-      this.$store.commit("setEmail", email);
 
       axios
-        .get("https://localhost:7187/api/User/Index", {
+        .get("https://localhost:7187/api/User/GetProfile", {
           headers: {
             Authorization: "Bearer " + token,
           },
         })
         .then((response) => {
           console.log(response);
+          this.$store.commit("setUsername", response.data.name);
+          this.$store.commit("setEmail", response.data.email);
           this.$router.push({ name: "Home" });
         })
         .catch((error) => {
